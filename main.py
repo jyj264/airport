@@ -3,7 +3,6 @@ import pandas
 import streamlit as st
 import time
 from enum import Enum
-import pyttsx3
 
 def add_outAirlineA(a, Airline, Flight, Counter, Departure_time, To):
     a = a._append({"Airline": Airline, "Flight": Flight, "To": To, "Counter": Counter, "Departure time": Departure_time,
@@ -36,63 +35,6 @@ def stopBoardingA(a, i):
     except KeyError:
         pass
     return a
-
-def Num2En(str1):
-    for i in str1:
-        if i=='1':
-            sub1=str1[0:str1.index(i)]
-            sub2=str1[str1.index(i)+1:]
-            str1=sub1+' one '+sub2
-        elif i=='2':
-            sub1 = str1[0:str1.index(i)]
-            sub2 = str1[str1.index(i) + 1:]
-            str1 = sub1 + ' two ' + sub2
-        elif i=='3':
-            sub1 = str1[0:str1.index(i)]
-            sub2 = str1[str1.index(i) + 1:]
-            str1 = sub1 + ' three ' + sub2
-        elif i=='4':
-            sub1 = str1[0:str1.index(i)]
-            sub2 = str1[str1.index(i) + 1:]
-            str1 = sub1 + ' four ' + sub2
-        elif i=='5':
-            sub1 = str1[0:str1.index(i)]
-            sub2 = str1[str1.index(i) + 1:]
-            str1 = sub1 + ' five ' + sub2
-        elif i=='6':
-            sub1 = str1[0:str1.index(i)]
-            sub2 = str1[str1.index(i) + 1:]
-            str1 = sub1 + ' six ' + sub2
-        elif i=='7':
-            sub1 = str1[0:str1.index(i)]
-            sub2 = str1[str1.index(i) + 1:]
-            str1 = sub1 + ' seven ' + sub2
-        elif i=='8':
-            sub1 = str1[0:str1.index(i)]
-            sub2 = str1[str1.index(i) + 1:]
-            str1 = sub1 + ' eight ' + sub2
-        elif i=='9':
-            sub1 = str1[0:str1.index(i)]
-            sub2 = str1[str1.index(i) + 1:]
-            str1 = sub1 + ' nine ' + sub2
-        elif i=='0':
-            sub1 = str1[0:str1.index(i)]
-            sub2 = str1[str1.index(i) + 1:]
-            str1 = sub1 + ' ten ' + sub2
-    return str1
-
-def read(abc):
-    engine = pyttsx3.init()
-    engine.say(Num2En(abc))
-    # 设置音色（可选）
-    voices = engine.getProperty('voices')
-    engine.setProperty('voice', voices[0].id)
-    # 设置语言为英文
-    engine.setProperty('language', 'eng')
-    rate = engine.getProperty('rate')
-    engine.setProperty('rate', 10)
-    engine.runAndWait()
-    engine.stop()
 
 def stopBoardingB(b, i):
     b["Remark"][i] = "Taking off"
@@ -308,37 +250,6 @@ def main():
                                     a = EraseA(a, rn)
                                 b = EraseB(b, rn)
                                 st.success("操作成功！")
-                        elif s=="🔘 广播当前状态":
-                            if b["Remark"][rn] == "Waiting":
-                                st.error("正在候机，无需广播")
-                            elif b["Remark"][rn] == "Delayed":
-                                delayC = "May I have your attention please,Flight " + ch2 + " to " + b["To"][
-                                    rn] + " is delayed.We deeply apologize for this.The new boarding time is " + str(
-                                    b["Departure time"][
-                                        rn]) + ".Please wait patiently in your seat,thank you."
-                                st.info("广播内容：" + delayC)
-                                if st.button("开始广播", key=123893):
-                                    read(delayC)
-                            elif b["Remark"][rn] == "Boarding":
-                                boardingC = "May I have your attention please,Flight " + ch2 + " to " + b["To"][
-                                    rn] + " is now boarding.Please go to gate number " + str(
-                                    b["Gate"][rn]) + " to handle it."
-                                st.info("广播内容：" + boardingC)
-                                if st.button("开始广播", key=123893):
-                                    read(boardingC)
-                            elif b["Remark"][rn] == "Taking off":
-                                stopC = "May I have your attention please,Flight " + ch2 + " to " + b["To"][
-                                    rn] + " is now stop boarding."
-                                st.info("广播内容：" + stopC)
-                                if st.button("开始广播", key=123893):
-                                    read(stopC)
-                            elif b["Remark"][rn] == "Checking-in":
-                                checkingC = "May I have your attention please,Flight " + ch2 + " to " + b["To"][
-                                    rn] + " is now checking in.Please go to counter " + str(
-                                    a["Counter"][rn]) + " to handle it."
-                                st.info("广播内容：" + checkingC)
-                                if st.button("开始广播", key=123893):
-                                    read(checkingC)
                     try:
                         a.to_csv('Airport_Data_a.csv', index=False)
                         b.to_csv('Airport_Data_b.csv', index=False)
